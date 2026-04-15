@@ -13,6 +13,7 @@ export_presets.cfg
 data_*/
 ignore/
 *.import
+*.uid
 addons/
 demo/
 builds/
