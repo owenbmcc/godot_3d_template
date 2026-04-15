@@ -18,7 +18,10 @@ extends Control
 ## 
 ## in-game, instance in level:
 ## • Node (level)
-## 	% menu
+## 	• CanvasLayer (ui)
+## 		% menu
+##
+## you may want to make a copy for ingame menu with different button options
 
 ## scene to load when clicking start button
 ## example, add other scenes for instructions, stage selection, etc
