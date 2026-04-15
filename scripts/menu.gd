@@ -1,6 +1,7 @@
 extends Control
 ## example start menu, with start and quit buttons
 ## also works as in game overlay
+## duplicate for multiple menus
 ## 
 ## node setup varies based on design, one example:
 ## • Control (menu) # menu.gd
