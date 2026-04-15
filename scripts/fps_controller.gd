@@ -8,13 +8,12 @@ https://github.com/rbarongr/GodotFirstPersonController/blob/main/Player/player.g
 	• Camera
 		~ Area3D (PickupArea)
 	~ AudioStreamPlayer2D (Jump)
-	~ AudioStreamPlayer2D (Throw)
-	~ AudioStreamPlayer2D (Pickup)
 	~ AudioStreamPlayer2D (Footstep)
 	~ Timer (FootstepTimer)
 
-fps_controller uses the following inputs:
-	move_forward, move_backward, move_right, move_left, jump
+fps_controller inputs:
+move_forward, move_backward, move_right, move_left, jump
+mouse to toggle mouse capture
 Defined in Project > Project Settings > Input Map
 """
 
@@ -54,7 +53,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		look_dir = event.relative * 0.001
 		if mouse_captured: _rotate_camera()
 	if Input.is_action_just_pressed("jump"): jumping = true
-	if Input.is_action_just_pressed("exit"): get_tree().quit()
+	if Input.is_action_just_pressed("mouse"):
+		if mouse_captured:
+			release_mouse()
+		else:
+			capture_mouse()
 
 func _physics_process(delta: float) -> void:
 	if is_talking:

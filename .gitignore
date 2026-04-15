@@ -18,7 +18,5 @@ demo/
 builds/
 blenders/
 .DS_Store
-scenes/components/
-scenes/ui/
-scenes/levels/
 dialog
+scenes/dev/

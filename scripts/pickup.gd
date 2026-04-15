@@ -1,7 +1,23 @@
-extends Area3D
+"""
+pick up objects and parent then to $Hand positions
+parent to camera in player scene
+add camera to camera export
 
-@onready var hand = $"../Hand"
-@onready var camera = $".."
+• Node3D (PlayerPickup)
+	• Marker3D (Hand)
+	• Area3D (PickupArea)
+		• CollisionShape3D
+	• AudioStreamPlayer3D (Pickup)
+	• AudioStreamPlayer3D (Throw)
+
+fps_controller uses inputs: throw, pickup
+Defined in Project > Project Settings > Input Map
+"""
+extends Node3D
+
+@export var camera : Camera3D
+@onready var hand = $Hand
+@onready var pickup_area : Area3D = $PickupArea
 
 var pull_speed = 2
 var throw_speed = 8
@@ -10,6 +26,11 @@ var pickup_object = null
 var is_picked = false
 
 signal update_console
+
+func _ready():
+	# connect signals from pickup area to script
+	pickup_area.body_entered.connect(_on_body_entered)
+	pickup_area.body_exited.connect(_on_body_exited)
 
 func _physics_process(_delta):
 	# check that we have an object picked up
@@ -49,7 +70,7 @@ func _unhandled_input(_event):
 			else:
 				# pick up object
 				is_picked = true
-				$"../../Pickup".play()
+				$Pickup.play()
 	
 	# detect user clicked throw
 	if Input.is_action_just_pressed("throw") and pickup_object and is_picked:
@@ -65,7 +86,7 @@ func _unhandled_input(_event):
 		# remove object
 		pickup_object = null
 		is_picked = false
-		$"../../Throw".play()
+		$Throw.play()
 
 func _on_body_entered(body):
 	# first check if an object is picked up
@@ -74,7 +95,6 @@ func _on_body_entered(body):
 		return
 	pickup_object = body
 	update_console.emit("Press F to pick up box.")
-
 
 func _on_body_exited(_body):
 	update_console.emit("")
