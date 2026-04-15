@@ -6,6 +6,10 @@ extends Control
 ## 	• Control (dialog) # dialog_scene.gd
 ## 	~ Camera(2D/3D) (if no player or other scene camera)
 ## 	~ Visuals, other stuff
+##
+## requires Dialgue Manager plugin
+## go to AssetLib, search "Dialogue Manager 3" and install
+## setup: Project > Project Settings > Plugins -> check Enabled On
 
 ## dialog file to load
 @export_file("*.dialogue") var dialog_file
@@ -19,11 +23,11 @@ extends Control
 var dm # ref for dialoguemanager instance
 
 func _ready():
+	assert(Engine.has_singleton("DialogueManager"), "requires Dialogue Manager plugin, make sure it is installed and enabled")
 	assert(dialog_file != null, "add a dialog file")
 	assert(next_scene != null, "add a scene to load after intro dialog")
 	
-	if Engine.has_singleton("DialogueManager"):
-		dm = get_tree().get_root().get_node("DialogueManager")
+	dm = get_tree().get_root().get_node("DialogueManager")
 	dm.show_example_dialogue_balloon(load(dialog_file), dialog_name)
 	dm.connect("dialogue_ended", _on_dialogue_ended)
 
