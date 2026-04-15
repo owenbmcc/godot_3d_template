@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://s17k0gy5v185"]
+
+[ext_resource type="Script" uid="uid://bc580nkc7t10o" path="res://scripts/menu.gd" id="1_ekxnf"]
+[ext_resource type="Texture2D" uid="uid://cgeorxlen2gw8" path="res://icon.png" id="1_l6cm7"]
+
+[node name="menu" type="Control" unique_id=815631053]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ekxnf")
+start_level_scene = "uid://b4na4mujl2ot2"
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=683037572]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1290465332]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/HBoxContainer" unique_id=1054041072]
+layout_mode = 2
+
+[node name="logo" type="TextureRect" parent="CenterContainer/HBoxContainer/CenterContainer" unique_id=772761803]
+layout_mode = 2
+texture = ExtResource("1_l6cm7")
+
+[node name="CenterContainer2" type="CenterContainer" parent="CenterContainer/HBoxContainer" unique_id=509115878]
+layout_mode = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="CenterContainer/HBoxContainer/CenterContainer2" unique_id=1882717029]
+layout_mode = 2
+
+[node name="start" type="Button" parent="CenterContainer/HBoxContainer/CenterContainer2/HBoxContainer" unique_id=511059672]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "start"
+
+[node name="quit" type="Button" parent="CenterContainer/HBoxContainer/CenterContainer2/HBoxContainer" unique_id=203483219]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "quit
+"
+
+[connection signal="pressed" from="CenterContainer/HBoxContainer/CenterContainer2/HBoxContainer/start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/CenterContainer2/HBoxContainer/quit" to="." method="_on_quit_pressed"]

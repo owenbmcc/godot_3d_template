@@ -5,7 +5,7 @@ extends Area3D
 ## 	• CollisionShape3D
 ## 	~ Mesh/Visual
 ## 
-## confirm input: "portal"
+## confirm input: "level_exit"
 
 
 @export var player_confirm: bool = false
@@ -21,7 +21,7 @@ func _unhandled_input(_event):
 		return
 	if requires_key and not global[key_name]:
 		return
-	if player_confirm and Input.is_action_just_pressed("portal"):
+	if player_confirm and Input.is_action_just_pressed("level_exit"):
 		get_tree().call_deferred("change_scene_to_file", level_to_load)
 
 func _on_body_entered(_body):
