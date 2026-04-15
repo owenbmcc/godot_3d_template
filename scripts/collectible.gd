@@ -1,3 +1,11 @@
+"""
+collect an item
+
+• Area3D (collectible name) # collectible.gd
+	• CollisionShape3D
+	• Mesh/Object (visual for collectible)
+"""
+
 extends Area3D
 
 @export var type = "apple"
@@ -11,7 +19,7 @@ func _on_body_entered(body):
 		global.apple_count = global.apple_count + 1
 	
 	if type == "special_key":
-		global.has_special_key = true
+		global.special_key = true
 
 	body.play_pickup_sound()
 	emit_signal("item_collected")

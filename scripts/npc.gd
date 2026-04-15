@@ -15,4 +15,3 @@ func _on_dialogue_detector_body_entered(body):
 
 func _on_dialogue_ended(_dialog):
 	player.is_talking = false # re-enables player movement
-

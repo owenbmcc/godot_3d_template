@@ -1,8 +1,15 @@
+"""
+global references
+save variable counts, config vars etc.
+Project > Project Settings > Globals
+name "global" (all lowercase)
+"""
+
 extends Node
 
 # counter for apple collectible
-var apple_count = 0
 # reference with global.apple_count
-var has_special_key : bool = false
+var apple_count : int = 0
 
-var head_bob_activated = false
+# boolean for key
+var special_key : bool = false
