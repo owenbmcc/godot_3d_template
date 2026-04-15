@@ -1,23 +1,20 @@
-"""
-simple 3d fps controller
-based on
-https://github.com/rbarongr/GodotFirstPersonController/blob/main/Player/player.gd
-
-• CharacterBody3D #PlayerController.gd (Player)
-	• CollisionShape3D
-	• Camera
-		~ Area3D (PickupArea)
-	~ AudioStreamPlayer3D (Jump)
-	~ AudioStreamPlayer3D (Footstep)
-	~ Timer (FootstepTimer)
-
-fps_controller inputs:
-move_forward, move_backward, move_right, move_left, jump
-mouse to toggle mouse capture
-Defined in Project > Project Settings > Input Map
-"""
-
 class_name Player extends CharacterBody3D
+## simple 3d fps controller
+## based on
+## https://github.com/rbarongr/GodotFirstPersonController/blob/main/Player/player.gd
+## 
+## • CharacterBody3D #PlayerController.gd (Player)
+## 	• CollisionShape3D
+## 	• Camera
+## 	~ Area3D (PickupArea)
+## 	~ AudioStreamPlayer3D ($JumpSound)
+## 	~ AudioStreamPlayer3D ($FootstepSound)
+## 	~ Timer (FootstepTimer)
+## 
+## fps_controller inputs:
+## move_forward, move_backward, move_right, move_left, jump
+## mouse to toggle mouse capture
+## Defined in Project > Project Settings > Input Map
 
 @export_category("player")
 
@@ -101,25 +98,26 @@ func _jump(delta: float) -> Vector3:
 	if jumping:
 		if is_on_floor(): jump_vel = Vector3(0, sqrt(4 * jump_height * gravity), 0)
 		jumping = false
-		if $Jump:
-			$Jump.play() # maybe debug later ... 
+		if $JumpSound:
+			$JumpSound.play() # maybe debug later ... 
 		return jump_vel
 	jump_vel = Vector3.ZERO if is_on_floor() else jump_vel.move_toward(Vector3.ZERO, gravity * delta)
 	return jump_vel
 
 # gets called by collectible on pickup
+# move to pickup
 func play_pickup_sound():
-	if !$Pickup:
+	if !$PickupSound:
 		return
-	$Pickup.play()
+	$PickupSound.play()
 
 func play_footstep_sound():
-	if !$Footstep:
+	if !$FootstepSound:
 		return
 	# if walk vector is greater than zero, we are moving
 	if walk_vel.length_squared() > 0 and is_on_floor():
 		if footstep_timer.is_stopped():
-			$Footstep.pitch_scale = randf_range(0.5, 1.5)
-			$Footstep.play()
+			$FootstepSound.pitch_scale = randf_range(0.5, 1.5)
+			$FootstepSound.play()
 			footstep_timer.wait_time = randf_range(0.25, 0.35)
 			footstep_timer.start()

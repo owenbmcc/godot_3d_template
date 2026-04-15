@@ -1,19 +1,25 @@
-"""
-pick up objects and parent then to $Hand positions
-parent to camera in player scene
-add camera to camera export
-
-• Node3D (PlayerPickup)
-	• Marker3D (Hand)
-	• Area3D (PickupArea)
-		• CollisionShape3D
-	• AudioStreamPlayer3D (Pickup)
-	• AudioStreamPlayer3D (Throw)
-
-fps_controller uses inputs: throw, pickup
-Defined in Project > Project Settings > Input Map
-"""
 extends Node3D
+## pick up objects and parent then to $Hand positions
+## parent to camera in player scene
+## add camera to camera export
+## needs player editable children to connect signal to hud
+## 
+## • Node3D (PlayerPickup) # pickup.gd
+## 	• Marker3D (Hand)
+## 	• Area3D (PickupArea)
+## 		[pickup detector] {pickables}
+## 	• CollisionShape3D
+## 	• AudioStreamPlayer3D ($PickupSound)
+## 	• AudioStreamPlayer3D ($ThrowSound)
+## 
+## fps_controller uses inputs: throw, pickup
+## Defined in Project > Project Settings > Input Map
+## 
+## pick up objects don't need script but do need node setup:
+## • RigidBody3D
+## 	[pickable] {platforms, pickup detector, enemy hit box}
+## 	• CollisionShape3D
+## 	• Mesh/Visual
 
 @export var camera : Camera3D
 @onready var hand = $Hand
@@ -25,9 +31,12 @@ var throw_speed = 8
 var pickup_object = null
 var is_picked = false
 
-signal update_console
+signal update_console(message: String)
 
 func _ready():
+	assert(camera != null, "add camera to export vars")
+	assert(get_parent().get_class() == "Camera3D", "PlayerPickup must be child of player camera")
+
 	# connect signals from pickup area to script
 	pickup_area.body_entered.connect(_on_body_entered)
 	pickup_area.body_exited.connect(_on_body_exited)
@@ -70,7 +79,8 @@ func _unhandled_input(_event):
 			else:
 				# pick up object
 				is_picked = true
-				$Pickup.play()
+				if $PickupSound:
+					$PickupSound.play()
 	
 	# detect user clicked throw
 	if Input.is_action_just_pressed("throw") and pickup_object and is_picked:
@@ -86,13 +96,13 @@ func _unhandled_input(_event):
 		# remove object
 		pickup_object = null
 		is_picked = false
-		$Throw.play()
+		if $ThrowSound:
+			$ThrowSound.play()
 
 func _on_body_entered(body):
 	# first check if an object is picked up
 	if pickup_object and is_picked:
-		# if so, end function here
-		return
+		return # if so, end function here
 	pickup_object = body
 	update_console.emit("Press F to pick up box.")
 

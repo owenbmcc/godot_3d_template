@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="3D_Game_Template"
+run/main_scene="uid://s17k0gy5v185"
 config/features=PackedStringArray("4.5")
 config/icon="res://icon.png"
 
@@ -26,11 +27,7 @@ window/size/fullscreen=true
 
 [editor_plugins]
 
-enabled=PackedStringArray()
-
-[gui]
-
-common/drop_mouse_on_gui_input_disabled=true
+enabled=PackedStringArray("res://addons/DocCommentHelper/plugin.cfg")
 
 [input]
 
@@ -125,18 +122,18 @@ locale/translations_pot_files=PackedStringArray("res://Dialogue/opening.dialogue
 
 [layer_names]
 
-3d_physics/layer_1="Player"
-3d_physics/layer_2="Platforms"
-3d_physics/layer_3="Collectible"
-3d_physics/layer_4="Pickable"
-3d_physics/layer_5="PickupDetector"
-3d_physics/layer_6="Enemies"
-3d_physics/layer_7="PlayerDetector"
-3d_physics/layer_8="EnemyHitbox"
-3d_physics/layer_9="Portal"
-3d_physics/layer_10="NPC"
-3d_physics/layer_11="DialogueDetector"
-3d_physics/layer_12="Checkpoint"
+3d_physics/layer_1="player"
+3d_physics/layer_2="platforms"
+3d_physics/layer_3="collectibles"
+3d_physics/layer_4="pickables"
+3d_physics/layer_5="pickup detector"
+3d_physics/layer_6="enemies"
+3d_physics/layer_7="enemy player detector"
+3d_physics/layer_8="enemy hitbox"
+3d_physics/layer_9="level exit"
+3d_physics/layer_10="npcs"
+3d_physics/layer_11="dialog detector"
+3d_physics/layer_12="checkpoints"
 
 [physics]
 

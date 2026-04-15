@@ -1,31 +1,59 @@
 extends CharacterBody3D
+## creates an enemy that patrols an area, detects player, and "attacks"
+## 
+## • CharacterBody3D (Enemy) # enemy.gd
+## |enemies| [enemies] {platforms}
+## • CollisionShape3D
+## • Mesh/Visual
+## • $NavigationAgent3D
+## • Area3D ($PlayerDetector)
+## [player detector] {player}
+## -> body_entered -> _on_player_detector_body_entered (self)
+## • Area3D ($HitBox)
+## [enemy hit box] {player, pickables} (or anything that can kill enemy)
+## -> body_entered -> _on_hit_box_body_entered (self)
+## ~ $AnimationPlayer ("idle", "walk", "follow", "attack")
+## ~ AudioStreamPlayer3D ($DetectSound)
+## ~ AudioStreamPlayer3D ($AttackSound)
+## ~ PackedScene (Explosion)
+## 
+## requires patrol locations, separate node structure
+## • Node3D (patrol locations)
+## • Marker3D (patrol 1)
+## • ...
+## 
+## add patrol locations to export var patrol_locations
 
 @onready var nav_agent = $NavigationAgent3D
-@export var speed = 3
+@export var speed : float = 3
 @export var patrol_locations : Array[Marker3D]
-@export_file var game_over_scene
+@export var explosion : PackedScene
 
-@export var ghost_explosion : PackedScene
+signal enemy_attack
 
 var patrol_index : int = 0
 var wait_frame : bool = true
 var is_following_player : bool = false
 
+var animation_player = get_node_or_null("AnimationPlayer")
+
 func _ready():
 	set_patrol_location()
+	if animation_player:
+		animation_player.play("walk")
 
-func set_patrol_location():
+func set_patrol_location() -> void:
 	var location = patrol_locations[patrol_index].global_position
 	nav_agent.set_target_position(location)
 
-func _physics_process(delta):
+func _physics_process(_delta) -> void:
 	# no navigation in the first physics frame
 	if wait_frame:
 		wait_frame = false
 		return
 	
 	# if enemy gets close to patrol target, set the next target
-	if nav_agent.distance_to_target() < 1 and not is_following_player:
+	if nav_agent.distance_to_target() < 1.5 and not is_following_player:
 		patrol_index = patrol_index + 1
 		if patrol_index >= patrol_locations.size():
 			patrol_index = 0
@@ -34,16 +62,19 @@ func _physics_process(delta):
 	
 	# enemy attacks player
 	if nav_agent.distance_to_target() < 2 and is_following_player:
-		global.apple_count = 0
-		global.has_special_key = false
-		get_tree().change_scene_to_file(game_over_scene)
+		emit_signal("enemy_attack")
+		if animation_player:
+			animation_player.play("follow")
+		if $AttackSound:
+			$AttackSound.play()
 		return
 	
 	var current_location = global_transform.origin
 	var next_location = nav_agent.get_next_path_position()
 	var new_velocity = (next_location - current_location).normalized() * speed
 	velocity = new_velocity
-	look_at(current_location + new_velocity)
+	if position.distance_to(current_location + new_velocity) > 0:
+		look_at(current_location + new_velocity, Vector3.UP, true)
 	move_and_slide()
 
 # gets the player location from the nav region
@@ -52,18 +83,25 @@ func update_target_location(target_location):
 		return
 	nav_agent.set_target_position(target_location)
 
-func _on_player_detect_body_entered(body):
+# player enters detection area
+func _on_player_detector_body_entered(_body) -> void:
 	is_following_player = true
-	$mouse/AnimationPlayer.play("run")
-	$DetectSound.play()
+	if animation_player:
+		animation_player.play("follow")
+	if $DetectSound:
+		$DetectSound.play()
 
-func _on_player_detect_body_exited(body):
+# player leaves detection area
+func _on_player_detector_body_exited(_body) -> void:
 	is_following_player = false
-	$mouse/AnimationPlayer.play("walk")
 	set_patrol_location()
+	if animation_player:
+		animation_player.play("walk")
 
-func _on_hitbox_body_entered(body):
-	var ge = ghost_explosion.instantiate()
-	ge.position = position # sets particle system to position of enemy
-	get_tree().current_scene.add_child(ge)
+# player/projectile hits hitbox
+func _on_hit_box_body_entered(_body):
+	if explosion:
+		var e = explosion.instantiate()
+		e.position = position # sets particle system to position of enemy
+		get_tree().current_scene.add_child(e)
 	queue_free()

@@ -1,12 +1,18 @@
 extends Control
+## opening dialog scene
+## or between levels
 
 @export_file var dialog_file
 @export var dialog_name : String
 @export_file var next_scene
 
+var dm # ref for dialoguemanager instance
+
 func _ready():
-	DialogueManager.show_example_dialogue_balloon(load(dialog_file), dialog_name)
-	DialogueManager.connect("dialogue_ended", _on_dialogue_ended)
+	if Engine.has_singleton("DialogueManager"):
+		dm = get_tree().get_root().get_node("DialogueManager")
+	dm.show_example_dialogue_balloon(load(dialog_file), dialog_name)
+	dm.connect("dialogue_ended", _on_dialogue_ended)
 
 func _on_dialogue_ended(_dialogue):
 	get_tree().change_scene_to_file(next_scene)

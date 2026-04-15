@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://cyq5q0qm3yvul"]
 
-[ext_resource type="Script" path="res://scripts/pickup.gd" id="1_6klky"]
+[ext_resource type="Script" uid="uid://bo5pq3jx0g4dp" path="res://scripts/pickup.gd" id="1_6klky"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_j235a"]
 size = Vector3(1.8374, 2.09253, 1.35449)
 
-[node name="PlayerPickup" type="Node3D" node_paths=PackedStringArray("camera")]
+[node name="PlayerPickup" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0154476, 0)
 script = ExtResource("1_6klky")
-camera = NodePath("")
 
 [node name="Hand" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.700257, -0.601449, -2.08917)
@@ -21,9 +21,9 @@ collision_mask = 8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0390625, 0.217651, -0.177246)
 shape = SubResource("BoxShape3D_j235a")
 
-[node name="Pickup" type="AudioStreamPlayer3D" parent="."]
+[node name="PickupSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.682056, -0.730979, -1.91944)
 volume_db = -18.0
 
-[node name="Throw" type="AudioStreamPlayer3D" parent="."]
+[node name="ThrowSound" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(0.99979, 0, -0.0204713, 0, 1, 0, 0.0204713, 0, 0.99979, 0.92782, -0.679963, -1.71128)

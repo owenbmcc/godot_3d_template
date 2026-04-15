@@ -1,14 +1,12 @@
-"""
-loads a new level
-option for player to confirm with key command (require HUD w/console)
-• Area3D (portal) # portal.gd
-	• CollisionShape3D
-	• Mesh/Object (visual for portal)
-
-confirm input: "portal"
-"""
-
 extends Area3D
+## loads a new level
+## option for player to confirm with key command (requires HUD w/console)
+## • Area3D (level exit) # level_exit.gd
+## 	• CollisionShape3D
+## 	~ Mesh/Visual
+## 
+## confirm input: "portal"
+
 
 @export var player_confirm: bool = false
 @export var requires_key: bool = false
