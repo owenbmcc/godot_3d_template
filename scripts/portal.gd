@@ -24,17 +24,19 @@ func _unhandled_input(_event):
 	if requires_key and not global[key_name]:
 		return
 	if player_confirm and Input.is_action_just_pressed("portal"):
-		get_tree().change_scene_to_file(level_to_load)
+		get_tree().call_deferred("change_scene_to_file", level_to_load)
 
 func _on_body_entered(_body):
-	if not player_confirm:
-		get_tree().change_scene_to_file(level_to_load)
+	if not player_confirm and not requires_key:
+		get_tree().call_deferred("change_scene_to_file", level_to_load)
 		return
 	player_entered = true
 	
 	if requires_key:
 		if not global[key_name]:
 			emit_signal("update_console", "You need to find the key")
+		elif not player_confirm:
+			get_tree().call_deferred("change_scene_to_file", level_to_load)
 		else:
 			emit_signal("update_console", "Press G to go to the next level")
 
