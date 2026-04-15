@@ -5,9 +5,9 @@ extends Control
 ## basic node setup (will need additional ui nodes)
 ## 
 ## • Control (hud) # hud.gd
-## • Label (console)
-## • Label (item_counter)
-## ~ Visual for counter (TextureRect, Sprite2D, AnimatedSprite2D, etc).
+## 	• Label (console)
+## 	• Label (item_counter)
+## 	~ Visual for counter (TextureRect, Sprite2D, AnimatedSprite2D, etc).
 ## 
 ## connect signals from portal, items collected etc.
 ## set up ui anchors and add other ui items for layout,
