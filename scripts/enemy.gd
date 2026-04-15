@@ -27,6 +27,7 @@ extends CharacterBody3D
 @onready var nav_agent = $NavigationAgent3D
 @export var speed : float = 3
 @export var patrol_locations : Array[Marker3D]
+@export var character_node : Node3D
 @export var explosion : PackedScene
 
 signal enemy_attack
@@ -35,12 +36,14 @@ var patrol_index : int = 0
 var wait_frame : bool = true
 var is_following_player : bool = false
 
-var animation_player = get_node_or_null("AnimationPlayer")
+var animation_player : AnimationPlayer
 
 func _ready():
 	set_patrol_location()
-	if animation_player:
-		animation_player.play("walk")
+	if character_node:
+		animation_player = character_node.find_child("AnimationPlayer")
+		if animation_player:
+			animation_player.play("walk")
 
 func set_patrol_location() -> void:
 	var location = patrol_locations[patrol_index].global_position
