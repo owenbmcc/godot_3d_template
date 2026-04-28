@@ -19,7 +19,7 @@ signal update_console
 func _unhandled_input(_event):
 	if not player_entered:
 		return
-	if requires_key and not global[key_name]:
+	if requires_key and not global.items[key_name]:
 		return
 	if player_confirm and Input.is_action_just_pressed("level_exit"):
 		get_tree().call_deferred("change_scene_to_file", level_to_load)
@@ -31,12 +31,14 @@ func _on_body_entered(_body):
 	player_entered = true
 	
 	if requires_key:
-		if not global[key_name]:
+		if not global.items[key_name]:
 			emit_signal("update_console", "You need to find the key")
 		elif not player_confirm:
 			get_tree().call_deferred("change_scene_to_file", level_to_load)
 		else:
 			emit_signal("update_console", "Press G to go to the next level")
+	else:
+		emit_signal("update_console", "Press G to go to the next level")
 
 func _on_body_exited(_body):
 	player_entered = false
